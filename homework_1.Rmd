@@ -1,0 +1,51 @@
+---
+title: "Homework 1"
+author: Rachel Heise
+output: github_document
+---
+
+Homework 1 Assignment
+
+# Problem 1
+
+Start by calling the tidyverse package.
+```{r}
+library(tidyverse)
+```
+Create a data frame that will be used to calculate mean values.
+```{r}
+mean_df = tibble(
+  std_normal = rnorm(n = 10),
+  positive_num = c(std_normal > 0),
+  char_vector = c('this', 'is', 'a', 'character', 'vector', 'of', 'length', 'ten', 'called', 'char_vector'),
+  factor_vector = factor(c('cat', 'dog', 'fish', 'cat', 'cat', 'fish', 'dog', 'dog', 'dog', 'fish'))
+)
+```
+Check whether a mean can be calculated for each column of the data frame.
+```{r}
+mean(mean_df$std_normal)
+mean(mean_df$positive_num)
+mean(mean_df$char_vector)
+mean(mean_df$factor_vector)
+```
+
+A mean can be calculated for the standard normal column and for the logical vector, but not for the character vector or the factor vector.
+
+
+Here, the logical, character, and factor vectors are converted to numeric vectors.
+```{r}
+as.numeric(mean_df$positive_num)
+```
+The logical vector returns 0 and 1 values.
+```{r}
+as.numeric(mean_df$char_vector)
+```
+The character vector returns NA values (not available).
+```{r}
+as.numeric(mean_df$factor_vector)
+```
+The factor vector returns values of 1, 2, and 3, based on which factor was selected. However, you are not able to take a mean of a factor vector because a value returned for this would have no meaning.
+
+
+
+# Problem 2
