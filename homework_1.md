@@ -4,9 +4,9 @@ Rachel Heise
 
 Homework 1 Assignment
 
-# Problem 1
+## Problem 1
 
-Start by calling the tidyverse package.
+Start by loading all the required libraries.
 
 ``` r
 library(tidyverse)
@@ -23,111 +23,113 @@ library(tidyverse)
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
+``` r
+library(ggplot2)
+```
+
 Create a data frame that will be used to calculate mean values.
 
 ``` r
-mean_df = tibble(
-  num_vector = rnorm(n = 10),
-  logical_vector = c(num_vector > 0),
-  char_vector = c('this', 'is', 'a', 'character', 'vector', 'of', 'length', 'ten', 'called', 'char_vector'),
-  factor_vector = factor(c('cat', 'dog', 'fish', 'cat', 'cat', 'fish', 'dog', 'dog', 'dog', 'fish'))
-)
+mean_df <-
+  tibble(
+    num_vector = rnorm(10),
+    logical_vector = num_vector > 0,
+    char_vector = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
+    factor_vector = factor(c("cat", "dog", "fish", "cat", "cat", "fish", "dog", "dog", "dog", "fish"))
+  )
 ```
 
 Check whether a mean can be calculated for each column of the data
 frame.
 
 ``` r
-mean(mean_df$num_vector)
+mean(pull(mean_df, num_vector))
 ```
 
-    ## [1] 0.2129172
+    ## [1] -0.3812174
 
 ``` r
-mean(mean_df$logical_vector)
+mean(pull(mean_df, logical_vector))
 ```
 
-    ## [1] 0.6
+    ## [1] 0.2
 
 ``` r
-mean(mean_df$char_vector)
+mean(pull(mean_df, char_vector))
 ```
 
-    ## Warning in mean.default(mean_df$char_vector): argument is not numeric or
+    ## Warning in mean.default(pull(mean_df, char_vector)): argument is not numeric or
     ## logical: returning NA
 
     ## [1] NA
 
 ``` r
-mean(mean_df$factor_vector)
+mean(pull(mean_df, factor_vector))
 ```
 
-    ## Warning in mean.default(mean_df$factor_vector): argument is not numeric or
-    ## logical: returning NA
+    ## Warning in mean.default(pull(mean_df, factor_vector)): argument is not numeric
+    ## or logical: returning NA
 
     ## [1] NA
 
-A mean can be calculated for the standard normal column and for the
-logical vector, but not for the character vector or the factor vector.
+A mean can be calculated for the numerical vector and for the logical
+vector, but not for the character vector or the factor vector. Type
+coercion occurs for the logical vector which is important to understand.
 
-Here, the logical, character, and factor vectors are converted to
+Next, the logical, character, and factor vectors are converted to
 numeric vectors.
 
 ``` r
-as.numeric(mean_df$logical_vector)
+as.numeric(pull(mean_df, logical_vector))
 ```
 
-    ##  [1] 0 0 1 1 1 1 0 1 1 0
-
-The logical vector returns 0 and 1 values.
+    ##  [1] 0 0 0 1 0 0 0 1 0 0
 
 ``` r
-as.numeric(mean_df$char_vector)
+as.numeric(pull(mean_df, char_vector))
 ```
 
     ## Warning: NAs introduced by coercion
 
     ##  [1] NA NA NA NA NA NA NA NA NA NA
 
-The character vector returns NA values (not available).
-
 ``` r
-as.numeric(mean_df$factor_vector)
+as.numeric(pull(mean_df, factor_vector))
 ```
 
     ##  [1] 1 2 3 1 1 3 2 2 2 3
 
-The factor vector returns values of 1, 2, and 3, based on which factor
-was selected. However, you are not able to take a mean of a factor
-vector because a value returned for this would have no meaning.
+The logical vector returns values of 0 and 1. The character vector
+returns NA values (not available). The factor vector returns values of
+1, 2, and 3.
+
+However, you are not able to take a mean of a factor vector because a
+value returned for this would have no meaning.
 
 ``` r
-log_to_num = as.numeric(mean_df$logical_vector)
-log_to_num * mean_df$num_vector
+as.numeric(pull(mean_df, logical_vector)) * pull(mean_df, num_vector)
 ```
 
-    ##  [1] 0.00000000 0.00000000 0.53060277 0.02837313 1.94822064 0.15559426
-    ##  [7] 0.00000000 0.60587615 1.36997352 0.00000000
+    ##  [1] 0.0000000 0.0000000 0.0000000 1.2536753 0.0000000 0.0000000 0.0000000
+    ##  [8] 0.2811225 0.0000000 0.0000000
 
 ``` r
-log_to_fact = as.factor(mean_df$logical_vector)
-log_to_fact * mean_df$num_vector
+as.factor(pull(mean_df, logical_vector)) * pull(mean_df, num_vector)
 ```
 
-    ## Warning in Ops.factor(log_to_fact, mean_df$num_vector): '*' not meaningful for
-    ## factors
+    ## Warning in Ops.factor(as.factor(pull(mean_df, logical_vector)), pull(mean_df, :
+    ## '*' not meaningful for factors
 
     ##  [1] NA NA NA NA NA NA NA NA NA NA
 
 ``` r
-log_fact_num = as.numeric(log_to_fact)
-log_fact_num * mean_df$num_vector
+as.numeric(as.factor(pull(mean_df, logical_vector))) * pull(mean_df, num_vector)
 ```
 
-    ##  [1] -1.79036919 -0.07538741  1.06120554  0.05674626  3.89644127  0.31118851
-    ##  [7] -0.07997616  1.21175231  2.73994704 -0.56373536
+    ##  [1] -1.017478656 -0.302048027 -0.428577039  2.507350689 -1.112701206
+    ##  [6] -0.011952192 -1.270673630  0.562244944 -1.194879685 -0.008661552
 
-# Problem 2
+## Problem 2
 
 ``` r
 data("penguins", package = "palmerpenguins")
@@ -152,10 +154,14 @@ for consideration are flipper\_length\_mm which has a mean value of
 200.92 and a standard deviation of 14.06.
 
 ``` r
-library(ggplot2)
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+```
 
-penguin_scatterplot = ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+    ## Warning: Removed 2 rows containing missing values (geom_point).
 
+![](homework_1_files/figure-gfm/create_scatterplot-1.png)<!-- -->
+
+``` r
 ggsave("penguin_scatterplot", device = "png")
 ```
 
