@@ -15,16 +15,16 @@ library(tidyverse)
 Create a data frame that will be used to calculate mean values.
 ```{r}
 mean_df = tibble(
-  std_normal = rnorm(n = 10),
-  positive_num = c(std_normal > 0),
+  num_vector = rnorm(n = 10),
+  logical_vector = c(num_vector > 0),
   char_vector = c('this', 'is', 'a', 'character', 'vector', 'of', 'length', 'ten', 'called', 'char_vector'),
   factor_vector = factor(c('cat', 'dog', 'fish', 'cat', 'cat', 'fish', 'dog', 'dog', 'dog', 'fish'))
 )
 ```
 Check whether a mean can be calculated for each column of the data frame.
 ```{r}
-mean(mean_df$std_normal)
-mean(mean_df$positive_num)
+mean(mean_df$num_vector)
+mean(mean_df$logical_vector)
 mean(mean_df$char_vector)
 mean(mean_df$factor_vector)
 ```
@@ -34,7 +34,7 @@ A mean can be calculated for the standard normal column and for the logical vect
 
 Here, the logical, character, and factor vectors are converted to numeric vectors.
 ```{r}
-as.numeric(mean_df$positive_num)
+as.numeric(mean_df$logical_vector)
 ```
 The logical vector returns 0 and 1 values.
 ```{r}
@@ -46,6 +46,39 @@ as.numeric(mean_df$factor_vector)
 ```
 The factor vector returns values of 1, 2, and 3, based on which factor was selected. However, you are not able to take a mean of a factor vector because a value returned for this would have no meaning.
 
+```{r}
+log_to_num = as.numeric(mean_df$logical_vector)
+log_to_num * mean_df$num_vector
 
+log_to_fact = as.factor(mean_df$logical_vector)
+log_to_fact * mean_df$num_vector
+
+log_fact_num = as.numeric(log_to_fact)
+log_fact_num * mean_df$num_vector
+```
 
 # Problem 2
+
+
+
+
+```{r}
+
+data("penguins", package = "palmerpenguins")
+
+nrow(penguins)
+ncol(penguins)
+
+mean_flip_length = mean(penguins$flipper_length_mm, na.rm = TRUE)
+```
+
+The Penguins data set contains `r ncol(penguins)` variables. Some of the most useful ones for consideration are `r names(penguins)[5]` which has a mean value of `r round(mean(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)` and a standard deviation of `r round(sd(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)`.
+
+```{r}
+library(ggplot2)
+
+penguin_scatterplot = ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+
+ggsave("penguin_scatterplot", device = "png")
+
+```
