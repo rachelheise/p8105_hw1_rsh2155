@@ -2,7 +2,7 @@ Homework 1
 ================
 Rachel Heise
 
-Homework 1 Assignment
+P8105 Homework 1
 
 ## Problem 1
 
@@ -12,14 +12,14 @@ Start by loading all the required libraries.
 library(tidyverse)
 ```
 
-    ## -- Attaching packages ------------------------------------------------------------------------------------------------------- tidyverse 1.3.0 --
+    ## -- Attaching packages ------------------------------------ tidyverse 1.3.0 --
 
     ## v ggplot2 3.3.2     v purrr   0.3.4
     ## v tibble  3.0.3     v dplyr   1.0.2
     ## v tidyr   1.1.2     v stringr 1.4.0
     ## v readr   1.3.1     v forcats 0.5.0
 
-    ## -- Conflicts ---------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+    ## -- Conflicts --------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -46,13 +46,13 @@ frame.
 mean(pull(mean_df, num_vector))
 ```
 
-    ## [1] -0.3812174
+    ## [1] 0.1358661
 
 ``` r
 mean(pull(mean_df, logical_vector))
 ```
 
-    ## [1] 0.2
+    ## [1] 0.5
 
 ``` r
 mean(pull(mean_df, char_vector))
@@ -81,27 +81,15 @@ numeric vectors.
 
 ``` r
 as.numeric(pull(mean_df, logical_vector))
-```
-
-    ##  [1] 0 0 0 1 0 0 0 1 0 0
-
-``` r
 as.numeric(pull(mean_df, char_vector))
-```
-
-    ## Warning: NAs introduced by coercion
-
-    ##  [1] NA NA NA NA NA NA NA NA NA NA
-
-``` r
 as.numeric(pull(mean_df, factor_vector))
 ```
 
-    ##  [1] 1 2 3 1 1 3 2 2 2 3
-
-The logical vector returns values of 0 and 1. The character vector
-returns NA values (not available). The factor vector returns values of
-1, 2, and 3.
+The logical vector returns values of 0 and 1, which is the numeric
+version of this boolean. The character vector returns NA values (not
+available) because letters or words cannot be converted to numbers.
+Finally, the factor vector returns values of 1, 2, and 3, because R
+orders the factors numerically.
 
 However, you are not able to take a mean of a factor vector because a
 value returned for this would have no meaning.
@@ -110,8 +98,8 @@ value returned for this would have no meaning.
 as.numeric(pull(mean_df, logical_vector)) * pull(mean_df, num_vector)
 ```
 
-    ##  [1] 0.0000000 0.0000000 0.0000000 1.2536753 0.0000000 0.0000000 0.0000000
-    ##  [8] 0.2811225 0.0000000 0.0000000
+    ##  [1] 0.61352161 0.00000000 0.00000000 0.00000000 0.00000000 1.31001444
+    ##  [7] 0.84182240 0.00000000 0.86237216 0.09496868
 
 ``` r
 as.factor(pull(mean_df, logical_vector)) * pull(mean_df, num_vector)
@@ -126,38 +114,24 @@ as.factor(pull(mean_df, logical_vector)) * pull(mean_df, num_vector)
 as.numeric(as.factor(pull(mean_df, logical_vector))) * pull(mean_df, num_vector)
 ```
 
-    ##  [1] -1.017478656 -0.302048027 -0.428577039  2.507350689 -1.112701206
-    ##  [6] -0.011952192 -1.270673630  0.562244944 -1.194879685 -0.008661552
+    ##  [1]  1.2270432 -0.2829971 -0.3798851 -0.1612546 -0.3916889  2.6200289
+    ##  [7]  1.6836448 -1.1482123  1.7247443  0.1899374
 
 ## Problem 2
 
 ``` r
 data("penguins", package = "palmerpenguins")
-
-nrow(penguins)
 ```
 
-    ## [1] 344
+The Penguins data set contains 8 variables and 344 observations. Several
+are quite useful for consideration: flipper\_length\_mm has a mean value
+of 200.92 and a standard deviation of 14.06. There are 3 species,
+including Adelie, Chinstrap, Gentoo. Finally, the years seen range from
+2007 to 2009.
 
 ``` r
-ncol(penguins)
+print(ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point())
 ```
-
-    ## [1] 8
-
-``` r
-mean_flip_length = mean(penguins$flipper_length_mm, na.rm = TRUE)
-```
-
-The Penguins data set contains 8 variables. Some of the most useful ones
-for consideration are flipper\_length\_mm which has a mean value of
-200.92 and a standard deviation of 14.06.
-
-``` r
-ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
-```
-
-    ## Warning: Removed 2 rows containing missing values (geom_point).
 
 ![](homework_1_files/figure-gfm/create_scatterplot-1.png)<!-- -->
 
@@ -166,5 +140,3 @@ ggsave("penguin_scatterplot", device = "png")
 ```
 
     ## Saving 7 x 5 in image
-
-    ## Warning: Removed 2 rows containing missing values (geom_point).

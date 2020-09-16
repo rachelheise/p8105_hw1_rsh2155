@@ -4,7 +4,7 @@ author: Rachel Heise
 output: github_document
 ---
 
-Homework 1 Assignment
+P8105 Homework 1
 
 ## Problem 1
 
@@ -41,15 +41,15 @@ A mean can be calculated for the numerical vector and for the logical vector, bu
 
 Next, the logical, character, and factor vectors are converted to numeric vectors.
 
-```{r as_numeric}
+```{r as_numeric, results="hide", warning=FALSE}
 as.numeric(pull(mean_df, logical_vector))
 as.numeric(pull(mean_df, char_vector))
 as.numeric(pull(mean_df, factor_vector))
 ```
 
-The logical vector returns values of 0 and 1.
-The character vector returns NA values (not available).
-The factor vector returns values of 1, 2, and 3.
+The logical vector returns values of 0 and 1, which is the numeric version of this boolean.
+The character vector returns NA values (not available) because letters or words cannot be converted to numbers.
+Finally, the factor vector returns values of 1, 2, and 3, because R orders the factors numerically.
 
 
 However, you are not able to take a mean of a factor vector because a value returned for this would have no meaning.
@@ -70,17 +70,13 @@ as.numeric(as.factor(pull(mean_df, logical_vector))) * pull(mean_df, num_vector)
 
 data("penguins", package = "palmerpenguins")
 
-nrow(penguins)
-ncol(penguins)
-
-mean_flip_length = mean(penguins$flipper_length_mm, na.rm = TRUE)
 ```
 
-The Penguins data set contains `r ncol(penguins)` variables. Some of the most useful ones for consideration are `r names(penguins)[5]` which has a mean value of `r round(mean(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)` and a standard deviation of `r round(sd(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)`.
+The Penguins data set contains `r ncol(penguins)` variables and `r nrow(penguins)` observations. Several are quite useful for consideration: `r names(penguins)[5]` has a mean value of `r round(mean(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)` and a standard deviation of `r round(sd(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)`. There are `r nlevels(pull(penguins, species))` species, including `r levels(pull(penguins, species))`. Finally, the years seen range from `r min(pull(penguins, year))` to `r max(pull(penguins, year))`.
 
-```{r create_scatterplot}
+```{r create_scatterplot, warning=FALSE}
 
-ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+print(ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point())
 
 ggsave("penguin_scatterplot", device = "png")
 
