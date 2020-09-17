@@ -74,7 +74,7 @@ data("penguins", package = "palmerpenguins")
 
 ```
 
-The Penguins data set contains `r ncol(penguins)` variables and `r nrow(penguins)` observations. Several are quite useful for consideration: `r names(penguins)[5]` has a mean value of `r round(mean(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)` and a standard deviation of `r round(sd(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)`. `r names(penguins)[3]` has a mean value of `r round(mean(penguins$bill_length_mm, na.rm = TRUE), digits = 2)` and a standard deviation of `r round(sd(penguins$bill_length_mm, na.rm = TRUE), digits = 2)`. There are `r nlevels(pull(penguins, species))` species, including `r levels(pull(penguins, species))`. Finally, the years for these penguins range from `r min(pull(penguins, year))` to `r max(pull(penguins, year))`.
+The Penguins data set contains `r ncol(penguins)` variables and `r nrow(penguins)` observations. Several are quite useful for consideration: `r names(penguins)[5]` has a mean value of `r round(mean(pull(penguins, flipper_length_mm), na.rm = TRUE), digits = 2)` and a standard deviation of `r round(sd(pull(penguins, flipper_length_mm), na.rm = TRUE), digits = 2)`. `r names(penguins)[3]` has a mean value of `r round(mean(pull(penguins, bill_length_mm), na.rm = TRUE), digits = 2)` and a standard deviation of `r round(sd(pull(penguins, bill_length_mm), na.rm = TRUE), digits = 2)`. There are `r nlevels(pull(penguins, species))` species, including `r levels(pull(penguins, species))`. Finally, the years for these penguins range from `r min(pull(penguins, year))` to `r max(pull(penguins, year))`.
 
 ```{r create_scatterplot, warning=FALSE}
 
